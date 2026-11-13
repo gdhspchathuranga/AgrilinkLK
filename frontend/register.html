@@ -1,0 +1,632 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Register - AgriLink LK</title>
+
+    <link rel="stylesheet" href="css/fonts.css">
+
+    <style>
+        /* ==============================
+           Root Variables
+        ============================== */
+        :root {
+            --ink: #0b2a2a;
+            --ink-2: #12403f;
+            --mint: #8fe3c0;
+            --papaya: #ff8a3d;
+            --fog: #eef4f2;
+            --white: #fff;
+            --muted: #4d6666;
+            --line: #c9dad5;
+            --error: #b3261e;
+        }
+
+        /* ==============================
+           Global Styles
+        ============================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--body);
+            color: var(--ink);
+            background: var(--white);
+            line-height: 1.6;
+            font-size: 17px;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--papaya);
+            outline-offset: 3px;
+            border-radius: 8px;
+        }
+
+        h1,
+        h2 {
+            font-family: var(--head);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -.01em;
+        }
+
+        /* ==============================
+           Main Page Layout
+        ============================== */
+        .page {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            min-height: 100vh;
+        }
+
+        /* ==============================
+           Brand Section
+        ============================== */
+        .brand {
+            position: relative;
+            color: var(--white);
+            background: linear-gradient(135deg, var(--ink), var(--ink-2));
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 48px;
+            overflow: hidden;
+        }
+
+        .brand > img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: .45;
+        }
+
+        .brand::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(
+                160deg,
+                rgba(11, 42, 42, .9),
+                rgba(11, 42, 42, .5)
+            );
+        }
+
+        .brand > *:not(img) {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Brand Logo */
+        .logo {
+            font-family: var(--head);
+            font-weight: 800;
+            font-size: 1.45rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            width: 14px;
+            height: 14px;
+            background: var(--papaya);
+            border-radius: 50%;
+            box-shadow: 0 0 0 5px rgba(255, 138, 61, .3);
+            display: inline-block;
+        }
+
+        /* Brand Content */
+        .brand h2 {
+            font-size: clamp(2rem, 3.4vw, 3rem);
+            max-width: 11em;
+        }
+
+        .brand p {
+            color: #d8ece6;
+            margin-top: 14px;
+            max-width: 26em;
+        }
+
+        .brand ul {
+            list-style: none;
+            margin-top: 22px;
+            display: grid;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .brand li::before {
+            content: "";
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--mint);
+            margin-right: 10px;
+        }
+
+        /* ==============================
+           Registration Form Section
+        ============================== */
+        .panel {
+            display: grid;
+            place-items: center;
+            padding: 40px 24px;
+            background: var(--fog);
+        }
+
+        .card {
+            width: min(520px, 100%);
+            background: var(--white);
+            border-radius: 28px;
+            padding: 38px 34px;
+            box-shadow: 0 20px 50px rgba(11, 42, 42, .12);
+        }
+
+        .card h1 {
+            font-size: 2rem;
+        }
+
+        .sub {
+            color: var(--muted);
+            margin: 6px 0 24px;
+        }
+
+        /* ==============================
+           Form Labels and Fields
+        ============================== */
+        label {
+            display: block;
+            font-weight: 700;
+            font-size: .95rem;
+            margin-bottom: 6px;
+        }
+
+        .field {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* Input and Select Styles */
+        input,
+        select {
+            width: 100%;
+            font: inherit;
+            padding: 13px 16px;
+            border-radius: 14px;
+            border: 2px solid var(--line);
+            background: var(--white);
+            color: var(--ink);
+            transition: border-color .15s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--ink);
+        }
+
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid rgba(255, 138, 61, .5);
+            outline-offset: 1px;
+        }
+
+        /* Password Field */
+        .field.pw input {
+            padding-right: 84px;
+        }
+
+        .toggle {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            border: 0;
+            background: var(--fog);
+            color: var(--ink);
+            font: inherit;
+            font-weight: 700;
+            font-size: .88rem;
+            padding: 6px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* Optional Field Text */
+        .optional {
+            font-weight: 400;
+            color: var(--muted);
+        }
+
+        .hint {
+            font-size: .88rem;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        /* ==============================
+           Submit Button
+        ============================== */
+        button[type="submit"] {
+            width: 100%;
+            margin-top: 8px;
+            font: inherit;
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 14px;
+            border: 0;
+            border-radius: 999px;
+            background: var(--papaya);
+            color: var(--ink);
+            cursor: pointer;
+            transition: filter .15s, transform .15s;
+        }
+
+        button[type="submit"]:hover {
+            filter: brightness(1.07);
+            transform: translateY(-2px);
+        }
+
+        button[type="submit"]:disabled {
+            opacity: .6;
+            cursor: wait;
+            transform: none;
+        }
+
+        /* ==============================
+           Form Messages
+        ============================== */
+        #formMessage {
+            min-height: 1.4em;
+            margin-bottom: 10px;
+            color: var(--error);
+            font-weight: 500;
+            font-size: .95rem;
+        }
+
+        #formMessage.ok {
+            color: #1a7f4b;
+        }
+
+        /* ==============================
+           Alternative Links
+        ============================== */
+        .alt {
+            margin-top: 22px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .alt a {
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 14px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: .95rem;
+        }
+
+        .back:hover {
+            color: var(--ink);
+        }
+
+        /* ==============================
+           Responsive Design
+        ============================== */
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+            }
+
+            .brand {
+                padding: 28px 24px;
+            }
+
+            .brand ul,
+            .brand p {
+                display: none;
+            }
+
+            .brand h2 {
+                font-size: 1.7rem;
+                margin-top: 18px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 30px 22px;
+            }
+        }
+
+        /* Reduced Motion Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ==============================
+         Main Page
+    ============================== -->
+    <div class="page">
+
+        <!-- ==============================
+             Brand Section
+        ============================== -->
+        <aside class="brand">
+
+            <!-- Logo -->
+            <a class="logo" href="index.html">
+                <i></i>AgriLink LK
+            </a>
+
+            <!-- Welcome Content -->
+            <div>
+                <h2>Join the marketplace that connects farms and buyers.</h2>
+
+                <p>
+                    Create your account in a couple of minutes.
+                </p>
+
+                <ul>
+                    <li>Farmers set their own prices per kilogram</li>
+                    <li>Buyers order directly from farmers</li>
+                    <li>No middlemen involved</li>
+                </ul>
+            </div>
+
+            <span></span>
+
+            <!-- Background Image -->
+            <img src="css/home.png" alt="" onerror="this.remove()">
+
+        </aside>
+
+        <!-- ==============================
+             Registration Form Section
+        ============================== -->
+        <main class="panel">
+
+            <div class="card form-container">
+
+                <!-- Registration Heading -->
+                <h1>Register</h1>
+
+                <p class="sub">
+                    Tell us a little about yourself to get started.
+                </p>
+
+                <!-- Registration Form -->
+                <form id="registerForm">
+
+                    <p
+                        id="formMessage"
+                        role="alert"
+                        aria-live="assertive"
+                    ></p>
+
+                    <!-- Full Name Field -->
+                    <div class="field">
+                        <label for="fullname">Full name</label>
+
+                        <input
+                            type="text"
+                            id="fullname"
+                            autocomplete="name"
+                            placeholder="Your full name"
+                            required
+                        >
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="field">
+                        <label for="email">Email</label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            autocomplete="email"
+                            placeholder="you@example.com"
+                            required
+                        >
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="field pw">
+                        <label for="password">Password</label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            autocomplete="new-password"
+                            placeholder="At least 8 characters"
+                            minlength="8"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="toggle"
+                            id="togglePw"
+                            aria-controls="password"
+                            aria-pressed="false"
+                        >
+                            Show
+                        </button>
+                    </div>
+
+                    <!-- User Role Selection -->
+                    <div class="field">
+                        <label for="role">I am a</label>
+
+                        <select id="role" required>
+                            <option value="Farmer">
+                                Farmer (I want to sell produce)
+                            </option>
+
+                            <option value="Buyer">
+                                Buyer (I want to buy produce)
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Phone and District Fields -->
+                    <div class="row">
+
+                        <!-- Phone Number -->
+                        <div class="field">
+                            <label for="phone">Phone</label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                autocomplete="tel"
+                                placeholder="07X XXX XXXX"
+                                required
+                            >
+                        </div>
+
+                        <!-- District Selection -->
+                        <div class="field">
+                            <label for="district">District</label>
+
+                            <select
+                                id="district"
+                                autocomplete="address-level1"
+                                required
+                            >
+                                <option value="">Select district</option>
+                                <option>Ampara</option>
+                                <option>Anuradhapura</option>
+                                <option>Badulla</option>
+                                <option>Batticaloa</option>
+                                <option>Colombo</option>
+                                <option>Galle</option>
+                                <option>Gampaha</option>
+                                <option>Hambantota</option>
+                                <option>Jaffna</option>
+                                <option>Kalutara</option>
+                                <option>Kandy</option>
+                                <option>Kegalle</option>
+                                <option>Kilinochchi</option>
+                                <option>Kurunegala</option>
+                                <option>Mannar</option>
+                                <option>Matale</option>
+                                <option>Matara</option>
+                                <option>Monaragala</option>
+                                <option>Mullaitivu</option>
+                                <option>Nuwara Eliya</option>
+                                <option>Polonnaruwa</option>
+                                <option>Puttalam</option>
+                                <option>Ratnapura</option>
+                                <option>Trincomalee</option>
+                                <option>Vavuniya</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- Create Account Button -->
+                    <button type="submit">
+                        Create account
+                    </button>
+
+                </form>
+
+                <!-- Login Link -->
+                <p class="alt">
+                    Already have an account?
+                    <a href="login.html">Login</a>
+                </p>
+
+                <!-- Back to Home -->
+                <a class="back" href="index.html">
+                    Back to home
+                </a>
+
+            </div>
+        </main>
+
+    </div>
+
+    <!-- ==============================
+         Registration Page JavaScript
+    ============================== -->
+    <script>
+        (function () {
+            "use strict";
+
+            /* Pre-select the role when the page is opened as register.html?role=farmer or ?role=buyer */
+            var wanted = (
+                new URLSearchParams(window.location.search).get("role") || ""
+            ).toLowerCase();
+
+            var roleSelect = document.getElementById("role");
+
+            Array.prototype.forEach.call(roleSelect.options, function (o) {
+                if (o.value.toLowerCase() === wanted) {
+                    roleSelect.value = o.value;
+                }
+            });
+
+            /* Show or hide the password */
+            var pw = document.getElementById("password");
+            var toggle = document.getElementById("togglePw");
+
+            toggle.addEventListener("click", function () {
+                var show = pw.type === "password";
+
+                pw.type = show ? "text" : "password";
+                toggle.textContent = show ? "Hide" : "Show";
+                toggle.setAttribute("aria-pressed", show);
+            });
+
+            /* Clear the error message as soon as the visitor edits a field */
+            var msg = document.getElementById("formMessage");
+
+            document.getElementById("registerForm").addEventListener("input", function () {
+                msg.textContent = "";
+            });
+
+        })();
+    </script>
+
+    <!-- Authentication JavaScript -->
+    <script src="js/auth.js"></script>
+
+</body>
+</html>

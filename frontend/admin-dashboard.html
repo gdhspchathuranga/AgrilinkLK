@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Dashboard - AgriLink LK</title>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="index.html"><i></i>AgriLink LK</a>
+    <nav aria-label="Main">
+      <a href="index.html">Home</a>
+      <button type="button" id="logoutBtn">Log out</button>
+    </nav>
+  </div>
+</header>
+
+<div class="banner">
+  <div class="wrap">
+    <div>
+      <h1 id="greeting">Admin dashboard</h1>
+      <p>Oversee users, products and orders across AgriLink LK.</p>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="stats six" aria-label="Summary" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat"><b id="statUsers">0</b><span id="statUsersSub">Users</span></div>
+    <div class="stat"><b id="statProducts">0</b><span>Products listed</span></div>
+    <div class="stat"><b id="statOrders">0</b><span id="statOrdersSub">Orders</span></div>
+  </div>
+  <div class="stats" style="margin-top:16px;grid-template-columns:repeat(3,1fr)">
+    <div class="stat"><b id="statRevenue">Rs. 0</b><span>Revenue from delivered orders</span></div>
+    <div class="stat"><b id="statUnverified">0</b><span>Users waiting for verification</span></div>
+    <div class="stat"><b id="statPending">0</b><span>Orders pending</span></div>
+  </div>
+
+  <section class="section" aria-label="Charts">
+    <div class="charts" style="grid-template-columns:1fr 1fr 1.4fr">
+      <div class="card"><h2>Orders by status</h2><div class="chart-box"><canvas id="chartOrders" role="img" aria-label="Orders by status"></canvas></div></div>
+      <div class="card"><h2>Users by role</h2><div class="chart-box"><canvas id="chartUsers" role="img" aria-label="Users by role"></canvas></div></div>
+      <div class="card"><h2>Delivered revenue by month (Rs.)</h2><div class="chart-box"><canvas id="chartRevenue" role="img" aria-label="Revenue by month"></canvas></div></div>
+    </div>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" id="tab-users" aria-selected="true" aria-controls="panel-users">Users</button>
+    <button role="tab" id="tab-products" aria-selected="false" aria-controls="panel-products">Products</button>
+    <button role="tab" id="tab-orders" aria-selected="false" aria-controls="panel-orders">Orders</button>
+  </div>
+
+  <section id="panel-users" role="tabpanel" aria-labelledby="tab-users" class="tab-panel" style="margin-bottom:70px">
+    <div class="toolbar">
+      <input type="search" id="userSearch" placeholder="Search by name, email or district" aria-label="Search users">
+      <select id="roleFilter" aria-label="Role">
+        <option value="">All roles</option><option value="farmer">Farmers</option>
+        <option value="buyer">Buyers</option><option value="admin">Admins</option>
+      </select>
+    </div>
+    <div class="table-wrap" id="userTable"><p class="empty">Loading users...</p></div>
+  </section>
+
+  <section id="panel-products" role="tabpanel" aria-labelledby="tab-products" class="tab-panel" style="margin-bottom:70px" hidden>
+    <div class="table-wrap" id="productTable"><p class="empty">Loading products...</p></div>
+  </section>
+
+  <section id="panel-orders" role="tabpanel" aria-labelledby="tab-orders" class="tab-panel" style="margin-bottom:70px" hidden>
+    <div class="table-wrap" id="orderTable"><p class="empty">Loading orders...</p></div>
+  </section>
+</main>
+
+<div id="toast" role="status" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

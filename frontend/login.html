@@ -1,0 +1,536 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Login - AgriLink LK</title>
+
+    <link rel="stylesheet" href="css/fonts.css">
+
+    <style>
+        /* ==============================
+           Root Variables
+        ============================== */
+        :root {
+            --ink: #0b2a2a;
+            --ink-2: #12403f;
+            --mint: #8fe3c0;
+            --papaya: #ff8a3d;
+            --fog: #eef4f2;
+            --white: #fff;
+            --muted: #4d6666;
+            --line: #c9dad5;
+            --error: #b3261e;
+        }
+
+        /* ==============================
+           Global Styles
+        ============================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--body);
+            color: var(--ink);
+            background: var(--white);
+            line-height: 1.6;
+            font-size: 17px;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--papaya);
+            outline-offset: 3px;
+            border-radius: 8px;
+        }
+
+        h1,
+        h2 {
+            font-family: var(--head);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -.01em;
+        }
+
+        /* ==============================
+           Main Page Layout
+        ============================== */
+        .page {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            min-height: 100vh;
+        }
+
+        /* ==============================
+           Brand Section
+        ============================== */
+        .brand {
+            position: relative;
+            color: var(--white);
+            background: linear-gradient(135deg, var(--ink), var(--ink-2));
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 48px;
+            overflow: hidden;
+        }
+
+        .brand > img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: .45;
+        }
+
+        .brand::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(
+                160deg,
+                rgba(11, 42, 42, .9),
+                rgba(11, 42, 42, .5)
+            );
+        }
+
+        .brand > *:not(img) {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Brand Logo */
+        .logo {
+            font-family: var(--head);
+            font-weight: 800;
+            font-size: 1.45rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            width: 14px;
+            height: 14px;
+            background: var(--papaya);
+            border-radius: 50%;
+            box-shadow: 0 0 0 5px rgba(255, 138, 61, .3);
+            display: inline-block;
+        }
+
+        /* Brand Content */
+        .brand h2 {
+            font-size: clamp(2rem, 3.6vw, 3.2rem);
+            max-width: 11em;
+        }
+
+        .brand p {
+            color: #d8ece6;
+            margin-top: 14px;
+            max-width: 26em;
+        }
+
+        .brand ul {
+            list-style: none;
+            margin-top: 22px;
+            display: grid;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .brand li::before {
+            content: "";
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--mint);
+            margin-right: 10px;
+        }
+
+        /* ==============================
+           Login Form Section
+        ============================== */
+        .panel {
+            display: grid;
+            place-items: center;
+            padding: 40px 24px;
+            background: var(--fog);
+        }
+
+        .card {
+            width: min(420px, 100%);
+            background: var(--white);
+            border-radius: 28px;
+            padding: 40px 34px;
+            box-shadow: 0 20px 50px rgba(11, 42, 42, .12);
+        }
+
+        .card h1 {
+            font-size: 2rem;
+        }
+
+        .sub {
+            color: var(--muted);
+            margin: 6px 0 26px;
+        }
+
+        /* ==============================
+           Form Fields
+        ============================== */
+        label {
+            display: block;
+            font-weight: 700;
+            font-size: .95rem;
+            margin-bottom: 6px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            font: inherit;
+            padding: 13px 16px;
+            border-radius: 14px;
+            border: 2px solid var(--line);
+            background: var(--white);
+            color: var(--ink);
+            transition: border-color .15s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--ink);
+        }
+
+        input:focus-visible {
+            outline: 3px solid rgba(255, 138, 61, .5);
+            outline-offset: 1px;
+        }
+
+        /* Password Field */
+        .field.pw input {
+            padding-right: 84px;
+        }
+
+        .toggle {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            border: 0;
+            background: var(--fog);
+            color: var(--ink);
+            font: inherit;
+            font-weight: 700;
+            font-size: .88rem;
+            padding: 6px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* ==============================
+           Submit Button
+        ============================== */
+        button[type="submit"] {
+            width: 100%;
+            margin-top: 6px;
+            font: inherit;
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 14px;
+            border: 0;
+            border-radius: 999px;
+            background: var(--papaya);
+            color: var(--ink);
+            cursor: pointer;
+            transition: filter .15s, transform .15s;
+        }
+
+        button[type="submit"]:hover {
+            filter: brightness(1.07);
+            transform: translateY(-2px);
+        }
+
+        button[type="submit"]:disabled {
+            opacity: .6;
+            cursor: wait;
+            transform: none;
+        }
+
+        /* ==============================
+           Form Messages
+        ============================== */
+        #formMessage {
+            min-height: 1.4em;
+            margin-bottom: 10px;
+            color: var(--error);
+            font-weight: 500;
+            font-size: .95rem;
+        }
+
+        #formMessage.ok {
+            color: #1a7f4b;
+        }
+
+        /* ==============================
+           Alternative Links
+        ============================== */
+        .alt {
+            margin-top: 22px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .alt a {
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 16px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: .95rem;
+        }
+
+        .back:hover {
+            color: var(--ink);
+        }
+
+        /* ==============================
+           Responsive Design
+        ============================== */
+        @media (max-width: 860px) {
+            .page {
+                grid-template-columns: 1fr;
+            }
+
+            .brand {
+                padding: 28px 24px;
+                min-height: 0;
+            }
+
+            .brand ul,
+            .brand p {
+                display: none;
+            }
+
+            .brand h2 {
+                font-size: 1.7rem;
+                margin-top: 18px;
+            }
+        }
+
+        /* Reduced Motion Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ==============================
+         Main Page
+    ============================== -->
+    <div class="page">
+
+        <!-- ==============================
+             Brand Section
+        ============================== -->
+        <aside class="brand">
+
+            <!-- Logo -->
+            <a class="logo" href="index.html">
+                <i></i>AgriLink LK
+            </a>
+
+            <!-- Welcome Content -->
+            <div>
+                <h2>Welcome back to the farm-to-buyer marketplace.</h2>
+
+                <p>
+                    Log in to manage your products, orders and prices.
+                </p>
+
+                <ul>
+                    <li>No middlemen involved</li>
+                    <li>Verified farmers and buyers</li>
+                    <li>Clear product and pricing details</li>
+                </ul>
+            </div>
+
+            <span></span>
+
+            <!-- Background Image -->
+            <img src="css/home.png" alt="" onerror="this.remove()">
+
+        </aside>
+
+        <!-- ==============================
+             Login Form Section
+        ============================== -->
+        <main class="panel">
+
+            <div class="card form-container">
+
+                <!-- Login Heading -->
+                <h1>Login</h1>
+
+                <p class="sub">
+                    Enter your email and password to continue.
+                </p>
+
+                <!-- Login Form -->
+                <form id="loginForm">
+
+                    <p
+                        id="formMessage"
+                        role="alert"
+                        aria-live="assertive"
+                    ></p>
+
+                    <!-- Email Field -->
+                    <div class="field">
+                        <label for="email">Email</label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            autocomplete="email"
+                            placeholder="you@example.com"
+                            required
+                        >
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="field pw">
+                        <label for="password">Password</label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            autocomplete="current-password"
+                            placeholder="Your password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="toggle"
+                            id="togglePw"
+                            aria-controls="password"
+                            aria-pressed="false"
+                        >
+                            Show
+                        </button>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit">
+                        Login
+                    </button>
+
+                </form>
+
+                <!-- Registration Link -->
+                <p class="alt">
+                    Don't have an account?
+                    <a href="register.html">Register</a>
+                </p>
+
+                <!-- Back to Home -->
+                <a class="back" href="index.html">
+                    Back to home
+                </a>
+
+            </div>
+        </main>
+
+    </div>
+
+    <!-- ==============================
+         Login Page JavaScript
+    ============================== -->
+    <script>
+        (function () {
+            "use strict";
+
+            /* If the visitor is already logged in, send them to their dashboard */
+            try {
+                var token = localStorage.getItem("token");
+                var user = {
+                    role: localStorage.getItem("role")
+                };
+
+                if (token) {
+                    var map = {
+                        farmer: "farmer-dashboard.html",
+                        buyer: "buyer-dashboard.html",
+                        admin: "admin-dashboard.html"
+                    };
+
+                    var target = user && map[String(user.role).toLowerCase()];
+
+                    if (target) {
+                        window.location.replace(target);
+                    }
+                }
+            } catch (e) {
+                /* ignore storage errors */
+            }
+
+            /* Show or hide the password */
+            var pw = document.getElementById("password");
+            var toggle = document.getElementById("togglePw");
+
+            toggle.addEventListener("click", function () {
+                var show = pw.type === "password";
+
+                pw.type = show ? "text" : "password";
+                toggle.textContent = show ? "Hide" : "Show";
+                toggle.setAttribute("aria-pressed", show);
+            });
+
+            var msg = document.getElementById("formMessage");
+
+            /* Show a confirmation after registering */
+            if (
+                new URLSearchParams(window.location.search).get("registered") === "1"
+            ) {
+                msg.textContent = "Account created. Please log in.";
+                msg.classList.add("ok");
+            }
+
+            /* Clear the message as soon as the visitor edits a field */
+            document.getElementById("loginForm").addEventListener("input", function () {
+                msg.textContent = "";
+                msg.classList.remove("ok");
+            });
+
+        })();
+    </script>
+
+    <!-- Authentication JavaScript -->
+    <script src="js/auth.js"></script>
+
+</body>
+</html>
