@@ -1,352 +1,115 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>About - AgriLink LK</title>
-
-    <link rel="stylesheet" href="css/fonts.css">
-
-    <style>
-        :root {
-            --ink: #0b2a2a;
-            --ink-2: #12403f;
-            --mint: #8fe3c0;
-            --papaya: #ff8a3d;
-            --fog: #eef4f2;
-            --white: #fff;
-            --muted: #4d6666;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: var(--body);
-            color: var(--ink);
-            background: var(--white);
-            line-height: 1.7;
-            font-size: 17px;
-        }
-
-        a {
-            color: inherit;
-        }
-
-        :focus-visible {
-            outline: 3px solid var(--papaya);
-            outline-offset: 3px;
-            border-radius: 8px;
-        }
-
-        h1,
-        h2,
-        h3 {
-            font-family: var(--head);
-            font-weight: 800;
-            line-height: 1.12;
-        }
-
-        .wrap {
-            width: min(1000px, 92%);
-            margin-inline: auto;
-        }
-
-        /* Header */
-
-        header {
-            background: var(--ink);
-            color: var(--white);
-        }
-
-        header .wrap {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 68px;
-        }
-
-        .logo {
-            font-family: var(--head);
-            font-weight: 800;
-            font-size: 1.35rem;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo i {
-            width: 13px;
-            height: 13px;
-            background: var(--papaya);
-            border-radius: 50%;
-            box-shadow: 0 0 0 5px rgba(255, 138, 61, 0.3);
-            display: inline-block;
-        }
-
-        nav a {
-            text-decoration: none;
-            padding: 8px 14px;
-            border-radius: 999px;
-            font-weight: 500;
-        }
-
-        nav a:hover {
-            background: rgba(255, 255, 255, 0.14);
-        }
-
-        /* Hero Section */
-
-        .hero {
-            background: linear-gradient(
-                120deg,
-                var(--ink),
-                var(--ink-2)
-            );
-            color: var(--white);
-            padding: 72px 0;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.2rem, 5vw, 3.6rem);
-            max-width: 14em;
-        }
-
-        .hero p {
-            color: #c4ddd6;
-            max-width: 36em;
-            margin-top: 16px;
-            font-size: 1.15rem;
-        }
-
-        /* Common Section Styles */
-
-        section {
-            padding: 64px 0;
-        }
-
-        h2 {
-            font-size: clamp(1.7rem, 3.4vw, 2.4rem);
-            margin-bottom: 22px;
-        }
-
-        /* Belief Cards */
-
-        .cols {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-
-        .col {
-            background: var(--fog);
-            border-radius: 22px;
-            padding: 26px;
-        }
-
-        .col h3 {
-            font-size: 1.2rem;
-            margin-bottom: 8px;
-        }
-
-        .col p {
-            color: var(--muted);
-        }
-
-        /* Call To Action */
-
-        .cta {
-            background: var(--mint);
-            border-radius: 28px;
-            padding: 44px;
-            text-align: center;
-        }
-
-        .cta p {
-            margin: 10px 0 22px;
-        }
-
-        /* Buttons */
-
-        .btn {
-            display: inline-block;
-            text-decoration: none;
-            font-weight: 700;
-            border-radius: 999px;
-            padding: 13px 28px;
-            background: var(--ink);
-            color: var(--white);
-        }
-
-        /* Footer */
-
-        footer {
-            background: var(--ink);
-            color: #b8d3cb;
-            padding: 28px 0;
-            text-align: center;
-            font-size: 0.95rem;
-            margin-top: 40px;
-        }
-
-        /* Responsive Design */
-
-        @media (max-width: 800px) {
-            .cols {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About - AgriLink LK</title>
+<meta name="description" content="AgriLink LK connects Sri Lankan farmers directly with buyers, promoting fair pricing and transparent trade.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
 </head>
-
 <body>
 
-    <!-- Header -->
+<header class="site-header">
+  <div class="container nav-bar">
+    <a class="logo" href="index.html" aria-label="AgriLink LK home">
+      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19c3-5 6-8 10-10"/></svg></span>
+      AgriLink LK
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="nav-links" id="navLinks" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="index.html#products">Products</a>
+      <a href="index.html#how">How it works</a>
+      <a href="about.html" aria-current="page">About</a>
+    </nav>
+    <div class="nav-auth" id="navAuth"></div>
+  </div>
+</header>
 
-    <header>
-        <div class="wrap">
-
-            <a class="logo" href="index.html">
-                <i></i>
-                AgriLink LK
-            </a>
-
-            <nav>
-                <a href="index.html">Home</a>
-                <a href="login.html">Login</a>
-                <a href="register.html">Register</a>
-            </nav>
-
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-
-    <div class="hero">
-        <div class="wrap">
-
-            <h1>Farmers and buyers, connected directly.</h1>
-
-            <p>
-                AgriLink LK is a digital platform that connects
-                Sri Lankan farmers directly with buyers, promoting
-                fair pricing and transparent trade.
-            </p>
-
-        </div>
+<main>
+  <section class="hero" style="margin-bottom:0">
+    <div class="hero-bg"></div>
+    <div class="container hero-inner" style="padding:80px 0">
+      <div class="hero-copy">
+        <span class="pill">About AgriLink LK</span>
+        <h1>Farmers and buyers, connected directly.</h1>
+        <p>AgriLink LK is a digital platform that connects Sri Lankan farmers directly with buyers, promoting fair pricing and transparent trade.</p>
+      </div>
     </div>
+  </section>
 
-    <!-- Main Content -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head center">
+        <h2>What we stand for</h2>
+        <p>Three simple ideas guide everything on the platform.</p>
+      </div>
+      <div class="cols-3">
+        <div class="card"><div class="trust-item" style="padding:0 0 12px"><div class="ico" id="v1"></div></div><h3>No middlemen</h3><p class="muted" style="margin-top:6px">Farmers set their own prices per kilogram and keep more of what their crops are worth.</p></div>
+        <div class="card"><div class="trust-item" style="padding:0 0 12px"><div class="ico" id="v2"></div></div><h3>Verified people</h3><p class="muted" style="margin-top:6px">Farmers and buyers are verified, so you know who you are trading with.</p></div>
+        <div class="card"><div class="trust-item" style="padding:0 0 12px"><div class="ico" id="v3"></div></div><h3>Clear details</h3><p class="muted" style="margin-top:6px">Every product shows its price, unit and available stock before you order.</p></div>
+      </div>
+    </div>
+  </section>
 
-    <main class="wrap">
+  <section class="section section-alt">
+    <div class="container two-col">
+      <div class="how-card">
+        <h3>For farmers</h3>
+        <ul class="ticks" style="margin:0">
+          <li>Register and list your produce with photos</li>
+          <li>Set your own prices and manage your stock</li>
+          <li>Receive and manage orders from your dashboard</li>
+        </ul>
+      </div>
+      <div class="how-card">
+        <h3>For buyers</h3>
+        <ul class="ticks" style="margin:0">
+          <li>Browse fresh local produce and compare prices</li>
+          <li>Order in bulk or in small quantities</li>
+          <li>Follow every order from pending to delivered</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-        <!-- What We Believe In -->
+  <section class="section">
+    <div class="container two-col">
+      <div>
+        <h2>Get in touch</h2>
+        <p class="muted" style="margin:10px 0 22px">Questions about the platform? We would love to hear from you.</p>
+        <ul class="steps" style="gap:14px">
+          <li style="align-items:center"><span id="c1"></span><a href="mailto:support@agrilinklk.com">support@agrilinklk.com</a></li>
+          <li style="align-items:center"><span id="c2"></span><a href="tel:+94755716912">+94 75 571 6912</a></li>
+          <li style="align-items:center"><span id="c3"></span><span>Sri Lanka</span></li>
+        </ul>
+      </div>
+      <div class="promo" style="flex-direction:column;align-items:flex-start">
+        <h2>Ready to join?</h2>
+        <p>Create your free account and start trading directly.</p>
+        <a class="btn btn-accent" href="register.html">Create free account</a>
+      </div>
+    </div>
+  </section>
+</main>
 
-        <section>
+<footer class="site-footer">
+  <div class="container">
+    <p class="copy" style="border:0;margin:0;padding:0">&copy; <span id="year">2025</span> AgriLink LK. All rights reserved. &nbsp;|&nbsp; <a href="index.html">Home</a> &nbsp;|&nbsp; <a href="register.html">Register</a> &nbsp;|&nbsp; <a href="login.html" data-account-link>Login</a></p>
+  </div>
+</footer>
 
-            <h2>What we believe in</h2>
-
-            <div class="cols">
-
-                <div class="col">
-                    <h3>No middlemen</h3>
-
-                    <p>
-                        Farmers set their own prices per kilogram
-                        and keep more of what their crops are worth.
-                    </p>
-                </div>
-
-                <div class="col">
-                    <h3>Verified people</h3>
-
-                    <p>
-                        Farmers and buyers are verified by our team,
-                        so you know who you are trading with.
-                    </p>
-                </div>
-
-                <div class="col">
-                    <h3>Clear details</h3>
-
-                    <p>
-                        Every product shows its price, unit and
-                        available stock before you order.
-                    </p>
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- Contact Section -->
-
-        <section>
-
-            <h2>Get in touch</h2>
-
-            <p>
-                Email:
-                <a href="mailto:support@agrilinklk.com">
-                    support@agrilinklk.com
-                </a>
-                <br>
-
-                Phone:
-                <a href="tel:+94755716912">
-                    +94 75 571 6912
-                </a>
-                <br>
-
-                Location: Sri Lanka
-            </p>
-
-        </section>
-
-        <!-- Call To Action -->
-
-        <div class="cta">
-
-            <h2 style="margin-bottom: 0">
-                Support local farmers. Buy fresh.
-            </h2>
-
-            <p>
-                Create your free account and start trading directly.
-            </p>
-
-            <a class="btn" href="register.html">
-                Create free account
-            </a>
-
-        </div>
-
-    </main>
-
-    <!-- Footer -->
-
-    <footer>
-
-        &copy;
-
-        <span id="year">2025</span>
-
-        AgriLink LK. All rights reserved.
-
-        <script>
-            document.getElementById("year").textContent =
-                new Date().getFullYear();
-        </script>
-
-    </footer>
-
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script>
+  ["shield", "users", "tag"].forEach(function (n, i) { document.getElementById("v" + (i + 1)).innerHTML = UI.icon(n, 24); });
+  ["mail", "phone", "pin"].forEach(function (n, i) { document.getElementById("c" + (i + 1)).innerHTML = '<span class="ico" style="width:42px;height:42px;border-radius:50%;background:var(--g-100);color:var(--g-700);display:grid;place-items:center">' + UI.icon(n, 20) + "</span>"; });
+</script>
+<script src="js/site.js"></script>
 </body>
-
 </html>

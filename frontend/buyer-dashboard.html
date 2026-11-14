@@ -1,369 +1,103 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Buyer Dashboard - AgriLink LK</title>
-
-    <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buyer Dashboard - AgriLink LK</title>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/dashboard.css">
 </head>
-
 <body>
 
-    <!-- Header -->
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="index.html"><i></i>AgriLink LK</a>
+    <nav aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <button type="button" id="logoutBtn">Log out</button>
+    </nav>
+  </div>
+</header>
 
-    <header class="top">
-        <div class="wrap">
-
-            <a class="logo" href="index.html">
-                <i></i>
-                AgriLink LK
-            </a>
-
-            <nav aria-label="Main">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-
-                <button type="button" id="logoutBtn">
-                    Log out
-                </button>
-            </nav>
-
-        </div>
-    </header>
-
-    <!-- Dashboard Banner -->
-
-    <div class="banner">
-        <div class="wrap">
-
-            <div>
-                <h1 id="greeting">Buyer dashboard</h1>
-
-                <p>
-                    Browse fresh produce, compare prices and
-                    order directly from farmers.
-                </p>
-            </div>
-
-        </div>
+<div class="banner">
+  <div class="wrap">
+    <div>
+      <h1 id="greeting">Buyer dashboard</h1>
+      <p>Browse fresh produce, compare prices and order directly from farmers.</p>
     </div>
-
-    <!-- Main Content -->
-
-    <main class="wrap">
-
-        <!-- Dashboard Statistics -->
-
-        <div class="stats" aria-label="Summary">
-
-            <div class="stat">
-                <b id="statOrders">0</b>
-                <span>Orders placed</span>
-            </div>
-
-            <div class="stat">
-                <b id="statPending">0</b>
-                <span>Waiting for the farmer</span>
-            </div>
-
-            <div class="stat">
-                <b id="statDelivered">0</b>
-                <span>Delivered</span>
-            </div>
-
-            <div class="stat">
-                <b id="statSpent">Rs. 0</b>
-                <span>Spent on accepted and delivered orders</span>
-            </div>
-
-        </div>
-
-        <!-- Dashboard Charts -->
-
-        <section
-            class="section"
-            id="chartsSection"
-            aria-label="Charts"
-            hidden
-        >
-
-            <div
-                class="charts"
-                style="grid-template-columns: 1fr 1.5fr"
-            >
-
-                <div class="card">
-
-                    <h2>Orders by status</h2>
-
-                    <div class="chart-box">
-                        <canvas
-                            id="chartStatus"
-                            role="img"
-                            aria-label="Orders by status"
-                        ></canvas>
-                    </div>
-
-                </div>
-
-                <div class="card">
-
-                    <h2>Spending by product (Rs.)</h2>
-
-                    <div class="chart-box">
-                        <canvas
-                            id="chartSpend"
-                            role="img"
-                            aria-label="Spending by product"
-                        ></canvas>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- Dashboard Tabs -->
-
-        <div
-            class="tabs"
-            role="tablist"
-            aria-label="Sections"
-        >
-
-            <button
-                role="tab"
-                id="tab-browse"
-                aria-selected="true"
-                aria-controls="panel-browse"
-            >
-                Browse produce
-            </button>
-
-            <button
-                role="tab"
-                id="tab-orders"
-                aria-selected="false"
-                aria-controls="panel-orders"
-            >
-                My orders
-            </button>
-
-        </div>
-
-        <!-- Browse Products Section -->
-
-        <section
-            id="panel-browse"
-            role="tabpanel"
-            aria-labelledby="tab-browse"
-            class="tab-panel"
-            style="margin-bottom: 70px"
-        >
-
-            <!-- Search, Category and Sorting -->
-
-            <div class="toolbar">
-
-                <input
-                    type="search"
-                    id="search"
-                    placeholder="Search produce"
-                    aria-label="Search produce"
-                >
-
-                <select
-                    id="categoryFilter"
-                    aria-label="Category"
-                >
-                    <option value="">All categories</option>
-                </select>
-
-                <select
-                    id="sort"
-                    aria-label="Sort"
-                >
-                    <option value="new">Newest first</option>
-                    <option value="low">Price: low to high</option>
-                    <option value="high">Price: high to low</option>
-                </select>
-
-            </div>
-
-            <!-- Product Grid -->
-
-            <div
-                class="grid"
-                id="productGrid"
-                aria-live="polite"
-            >
-
-                <div class="skeleton"></div>
-                <div class="skeleton"></div>
-                <div class="skeleton"></div>
-
-            </div>
-
-        </section>
-
-        <!-- My Orders Section -->
-
-        <section
-            id="panel-orders"
-            role="tabpanel"
-            aria-labelledby="tab-orders"
-            class="tab-panel"
-            style="margin-bottom: 70px"
-            hidden
-        >
-
-            <div
-                class="table-wrap"
-                id="orderTable"
-            >
-
-                <p class="empty">
-                    Loading your orders...
-                </p>
-
-            </div>
-
-        </section>
-
-    </main>
-
-    <!-- Order Dialog -->
-
-    <dialog id="orderDialog" aria-labelledby="orderTitle">
-
-        <h2 id="orderTitle">Place an order</h2>
-
-        <form id="orderForm">
-
-            <p
-                class="msg"
-                id="orderMsg"
-                role="alert"
-            ></p>
-
-            <!-- Order Summary -->
-
-            <p
-                id="orderSummary"
-                class="meta"
-                style="margin-bottom: 12px"
-            ></p>
-
-            <!-- Quantity Field -->
-
-            <div class="field">
-
-                <label for="o_qty">
-                    Quantity
-                </label>
-
-                <input
-                    id="o_qty"
-                    type="number"
-                    min="1"
-                    step="1"
-                    value="1"
-                    required
-                >
-
-            </div>
-
-            <!-- Order Total -->
-
-            <p
-                class="total-line"
-                id="orderTotal"
-            >
-                Total: Rs. 0
-            </p>
-
-            <!-- Delivery Address -->
-
-            <div class="field">
-
-                <label for="o_address">
-                    Delivery address
-                </label>
-
-                <textarea
-                    id="o_address"
-                    maxlength="200"
-                    placeholder="House no, street, town"
-                    required
-                ></textarea>
-
-            </div>
-
-            <!-- Additional Note -->
-
-            <div class="field">
-
-                <label for="o_note">
-                    Note to the farmer
-                    <span class="meta">(optional)</span>
-                </label>
-
-                <textarea
-                    id="o_note"
-                    maxlength="300"
-                    placeholder="Preferred delivery time, packing, ..."
-                ></textarea>
-
-            </div>
-
-            <!-- Dialog Action Buttons -->
-
-            <div class="dialog-actions">
-
-                <button
-                    type="button"
-                    class="btn ghost"
-                    id="orderCancel"
-                >
-                    Cancel
-                </button>
-
-                <button
-                    type="submit"
-                    class="btn"
-                >
-                    Place order
-                </button>
-
-            </div>
-
-        </form>
-
-    </dialog>
-
-    <!-- Notification Toast -->
-
-    <div
-        id="toast"
-        role="status"
-        hidden
-    ></div>
-
-    <!-- External JavaScript Libraries -->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-
-    <!-- Application JavaScript Files -->
-
-    <script src="js/api.js"></script>
-    <script src="js/buyer.js"></script>
-
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="stats" aria-label="Summary">
+    <div class="stat"><b id="statOrders">0</b><span>Orders placed</span></div>
+    <div class="stat"><b id="statPending">0</b><span>Waiting for the farmer</span></div>
+    <div class="stat"><b id="statDelivered">0</b><span>Delivered</span></div>
+    <div class="stat"><b id="statSpent">Rs. 0</b><span>Spent on accepted and delivered orders</span></div>
+  </div>
+
+  <section class="section" id="chartsSection" aria-label="Charts" hidden>
+    <div class="charts" style="grid-template-columns:1fr 1.5fr">
+      <div class="card"><h2>Orders by status</h2><div class="chart-box"><canvas id="chartStatus" role="img" aria-label="Orders by status"></canvas></div></div>
+      <div class="card"><h2>Spending by product (Rs.)</h2><div class="chart-box"><canvas id="chartSpend" role="img" aria-label="Spending by product"></canvas></div></div>
+    </div>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" id="tab-browse" aria-selected="true" aria-controls="panel-browse">Browse produce</button>
+    <button role="tab" id="tab-orders" aria-selected="false" aria-controls="panel-orders">My orders</button>
+  </div>
+
+  <section id="panel-browse" role="tabpanel" aria-labelledby="tab-browse" class="tab-panel" style="margin-bottom:70px">
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="Search produce" aria-label="Search produce">
+      <select id="categoryFilter" aria-label="Category"><option value="">All categories</option></select>
+      <select id="sort" aria-label="Sort">
+        <option value="new">Newest first</option>
+        <option value="low">Price: low to high</option>
+        <option value="high">Price: high to low</option>
+      </select>
+    </div>
+    <div class="grid" id="productGrid" aria-live="polite">
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+  </section>
+
+  <section id="panel-orders" role="tabpanel" aria-labelledby="tab-orders" class="tab-panel" style="margin-bottom:70px" hidden>
+    <div class="table-wrap" id="orderTable"><p class="empty">Loading your orders...</p></div>
+  </section>
+</main>
+
+<dialog id="orderDialog" aria-labelledby="orderTitle">
+  <h2 id="orderTitle">Place an order</h2>
+  <form id="orderForm">
+    <p class="msg" id="orderMsg" role="alert"></p>
+    <p id="orderSummary" class="meta" style="margin-bottom:12px"></p>
+    <div class="field">
+      <label for="o_qty">Quantity</label>
+      <input id="o_qty" type="number" min="1" step="1" value="1" required>
+    </div>
+    <p class="total-line" id="orderTotal">Total: Rs. 0</p>
+    <div class="field">
+      <label for="o_address">Delivery address</label>
+      <textarea id="o_address" maxlength="200" placeholder="House no, street, town" required></textarea>
+    </div>
+    <div class="field">
+      <label for="o_note">Note to the farmer <span class="meta">(optional)</span></label>
+      <textarea id="o_note" maxlength="300" placeholder="Preferred delivery time, packing, ..."></textarea>
+    </div>
+    <div class="dialog-actions">
+      <button type="button" class="btn ghost" id="orderCancel">Cancel</button>
+      <button type="submit" class="btn">Place order</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" role="status" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/buyer.js"></script>
 </body>
-
 </html>

@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { protect } = require("../middleware/authmiddleware");
 
 if (!process.env.JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined in your .env file");
@@ -118,6 +119,73 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Login failed. Please try again." });
+  }
+});
+
+/**
+ * PROFILE (any logged-in user)
+ */
+const publicUser = (u) => ({
+  id: u._id,
+  name: u.name,
+  email: u.email,
+  role: u.role,
+  phone: u.phone,
+  district: u.district,
+  verified: u.verified,
+  createdAt: u.createdAt
+});
+
+router.get("/me", protect(), (req, res) => {
+  res.json({ user: publicUser(req.user) });
+});
+
+router.put("/me", protect(), async (req, res) => {
+  try {
+    const name = text(req.body.name);
+    const phone = text(req.body.phone);
+    const district = text(req.body.district);
+
+    if (!name || !phone || !district) {
+      return res.status(400).json({ message: "Name, phone and district are required" });
+    }
+
+    req.user.name = name;
+    req.user.phone = phone;
+    req.user.district = district;
+    await req.user.save();
+
+    res.json({ message: "Profile updated", user: publicUser(req.user) });
+  } catch (error) {
+    console.error("Update profile error:", error);
+    res.status(500).json({ message: "Could not update your profile" });
+  }
+});
+
+router.put("/me/password", protect(), async (req, res) => {
+  try {
+    const current = typeof req.body.currentPassword === "string" ? req.body.currentPassword : "";
+    const next = typeof req.body.newPassword === "string" ? req.body.newPassword : "";
+
+    if (!current || !next) {
+      return res.status(400).json({ message: "Enter your current and new password" });
+    }
+    if (next.length < MIN_PASSWORD_LENGTH) {
+      return res.status(400).json({ message: `New password must be at least ${MIN_PASSWORD_LENGTH} characters` });
+    }
+
+    // The password hash is hidden by default, so ask for it here
+    const user = await User.findById(req.user._id).select("+password");
+    if (!(await bcrypt.compare(current, user.password))) {
+      return res.status(400).json({ message: "Current password is incorrect" });
+    }
+
+    user.password = await bcrypt.hash(next, 10);
+    await user.save();
+    res.json({ message: "Password changed" });
+  } catch (error) {
+    console.error("Change password error:", error);
+    res.status(500).json({ message: "Could not change your password" });
   }
 });
 

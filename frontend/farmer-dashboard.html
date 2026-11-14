@@ -1,1250 +1,284 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Farmer Dashboard - AgriLink LK</title>
-
-    <link rel="stylesheet" href="css/fonts.css">
-
-    <style>
-        /* ==============================
-           Root Variables
-        ============================== */
-        :root {
-            --ink: #0b2a2a;
-            --ink-2: #12403f;
-            --mint: #8fe3c0;
-            --papaya: #ff8a3d;
-            --sky: #c9dcf5;
-            --fog: #eef4f2;
-            --white: #fff;
-            --muted: #4d6666;
-            --line: #c9dad5;
-            --error: #b3261e;
-            --ok: #1a7f4b;
-        }
-
-        /* ==============================
-           Global Styles
-        ============================== */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: var(--body);
-            color: var(--ink);
-            background: var(--fog);
-            line-height: 1.6;
-            font-size: 16.5px;
-            min-height: 100vh;
-        }
-
-        a {
-            color: inherit;
-        }
-
-        :focus-visible {
-            outline: 3px solid var(--papaya);
-            outline-offset: 2px;
-            border-radius: 8px;
-        }
-
-        h1,
-        h2,
-        h3 {
-            font-family: var(--head);
-            line-height: 1.15;
-            font-weight: 800;
-        }
-
-        .wrap {
-            width: min(1220px, 94%);
-            margin-inline: auto;
-        }
-
-        [hidden] {
-            display: none !important;
-        }
-
-        /* ==============================
-           Top Navigation Bar
-        ============================== */
-        .top {
-            background: var(--ink);
-            color: var(--white);
-            position: sticky;
-            top: 0;
-            z-index: 40;
-        }
-
-        .top .wrap {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 66px;
-            gap: 16px;
-        }
-
-        .logo {
-            font-family: var(--head);
-            font-weight: 800;
-            font-size: 1.35rem;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo i {
-            width: 13px;
-            height: 13px;
-            background: var(--papaya);
-            border-radius: 50%;
-            box-shadow: 0 0 0 5px rgba(255, 138, 61, .3);
-            display: inline-block;
-        }
-
-        .top nav {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .top nav a,
-        .top nav button {
-            color: var(--white);
-            text-decoration: none;
-            background: none;
-            border: 0;
-            font: inherit;
-            font-weight: 500;
-            padding: 8px 14px;
-            border-radius: 999px;
-            cursor: pointer;
-        }
-
-        .top nav a:hover,
-        .top nav button:hover {
-            background: rgba(255, 255, 255, .14);
-        }
-
-        /* ==============================
-           Dashboard Banner
-        ============================== */
-        .banner {
-            background: linear-gradient(120deg, var(--ink), var(--ink-2));
-            color: var(--white);
-            padding: 36px 0 84px;
-        }
-
-        .banner .wrap {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .banner h1 {
-            font-size: clamp(1.8rem, 3.6vw, 2.6rem);
-        }
-
-        .banner p {
-            color: #bcdcd3;
-            margin-top: 4px;
-        }
-
-        /* ==============================
-           Dashboard Statistics
-        ============================== */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-top: -56px;
-        }
-
-        .stat {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 20px 22px;
-            box-shadow: 0 10px 30px rgba(11, 42, 42, .1);
-            border-top: 5px solid var(--mint);
-        }
-
-        .stat:nth-child(2) {
-            border-color: var(--papaya);
-        }
-
-        .stat:nth-child(3) {
-            border-color: var(--sky);
-        }
-
-        .stat:nth-child(4) {
-            border-color: var(--ink);
-        }
-
-        .stat b {
-            display: block;
-            font-family: var(--head);
-            font-size: 1.9rem;
-            line-height: 1.15;
-        }
-
-        .stat span {
-            color: var(--muted);
-            font-size: .93rem;
-        }
-
-        /* ==============================
-           Cards and Main Layout
-        ============================== */
-        .card {
-            background: var(--white);
-            border-radius: 24px;
-            padding: 24px;
-        }
-
-        .card h2 {
-            font-size: 1.25rem;
-            margin-bottom: 14px;
-        }
-
-        .section {
-            margin-top: 22px;
-        }
-
-        .charts {
-            display: grid;
-            grid-template-columns: 1fr 1.3fr 1.3fr;
-            gap: 18px;
-        }
-
-        .chart-box {
-            position: relative;
-            height: 240px;
-        }
-
-        .hint-empty {
-            color: var(--muted);
-            text-align: center;
-            padding: 30px 10px;
-        }
-
-        .layout {
-            display: grid;
-            grid-template-columns: 370px 1fr;
-            gap: 22px;
-            align-items: start;
-            padding-bottom: 70px;
-        }
-
-        .sticky {
-            position: sticky;
-            top: 86px;
-        }
-
-        /* ==============================
-           Form Elements
-        ============================== */
-        label {
-            display: block;
-            font-weight: 700;
-            font-size: .92rem;
-            margin-bottom: 5px;
-        }
-
-        .field {
-            margin-bottom: 14px;
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            font: inherit;
-            padding: 11px 14px;
-            border-radius: 12px;
-            border: 2px solid var(--line);
-            background: var(--white);
-            color: var(--ink);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--ink);
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        /* Image Upload Area */
-        .drop {
-            display: grid;
-            place-items: center;
-            text-align: center;
-            gap: 4px;
-            border: 2px dashed var(--line);
-            border-radius: 16px;
-            padding: 16px;
-            cursor: pointer;
-            color: var(--muted);
-            font-weight: 500;
-            background: var(--fog);
-            overflow: hidden;
-        }
-
-        .drop:hover,
-        .drop:focus-within {
-            border-color: var(--ink);
-        }
-
-        .drop img {
-            width: 100%;
-            max-height: 170px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .drop small {
-            font-weight: 400;
-        }
-
-        /* Checkbox */
-        .check {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-            margin: 8px 0 0;
-        }
-
-        .check input {
-            width: auto;
-        }
-
-        /* ==============================
-           Buttons and Messages
-        ============================== */
-        .btn {
-            font: inherit;
-            font-weight: 700;
-            border: 0;
-            border-radius: 999px;
-            padding: 12px 24px;
-            cursor: pointer;
-            background: var(--papaya);
-            color: var(--ink);
-            transition: filter .15s;
-        }
-
-        .btn:hover {
-            filter: brightness(1.07);
-        }
-
-        .btn:disabled {
-            opacity: .6;
-            cursor: wait;
-        }
-
-        .btn.full {
-            width: 100%;
-        }
-
-        .btn.ghost {
-            background: var(--fog);
-        }
-
-        .btn.small {
-            padding: 7px 14px;
-            font-size: .88rem;
-        }
-
-        .btn.danger {
-            background: #fde4e1;
-            color: var(--error);
-        }
-
-        .msg {
-            min-height: 1.3em;
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: .93rem;
-            color: var(--error);
-        }
-
-        /* ==============================
-           Product List and Filters
-        ============================== */
-        .tools {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 18px;
-        }
-
-        .tools h2 {
-            margin: 0;
-        }
-
-        .tools input {
-            max-width: 220px;
-        }
-
-        .filters {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 18px;
-        }
-
-        .filters button {
-            border: 2px solid var(--ink);
-            background: none;
-            color: var(--ink);
-            font: inherit;
-            font-weight: 700;
-            font-size: .9rem;
-            border-radius: 999px;
-            padding: 5px 16px;
-            cursor: pointer;
-        }
-
-        .filters button[aria-pressed="true"] {
-            background: var(--ink);
-            color: var(--white);
-        }
-
-        /* Product Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 18px;
-        }
-
-        .prod {
-            border: 1px solid var(--line);
-            border-radius: 20px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            background: var(--white);
-        }
-
-        .pic {
-            position: relative;
-            height: 150px;
-            background: linear-gradient(135deg, var(--mint), var(--sky));
-            display: grid;
-            place-items: center;
-            font-size: 3rem;
-        }
-
-        .pic img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            inset: 0;
-        }
-
-        /* Product Stock Badges */
-        .badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: .8rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 999px;
-        }
-
-        .badge.in {
-            background: #d6f5e6;
-            color: #116236;
-        }
-
-        .badge.out {
-            background: #ffe3d0;
-            color: #8a3a0b;
-        }
-
-        /* Product Details */
-        .pbody {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            flex: 1;
-        }
-
-        .pbody h3 {
-            font-family: var(--body);
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .meta {
-            color: var(--muted);
-            font-size: .9rem;
-        }
-
-        .price {
-            font-family: var(--head);
-            font-weight: 800;
-            font-size: 1.15rem;
-            margin-top: 4px;
-        }
-
-        .price small {
-            font-family: var(--body);
-            font-weight: 400;
-            color: var(--muted);
-        }
-
-        .desc {
-            font-size: .88rem;
-            margin-top: 4px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .actions {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-top: auto;
-            padding-top: 12px;
-        }
-
-        /* Empty and Loading States */
-        .empty {
-            text-align: center;
-            color: var(--muted);
-            padding: 40px 10px;
-            grid-column: 1 / -1;
-        }
-
-        .skeleton {
-            height: 250px;
-            border-radius: 20px;
-            background: linear-gradient(90deg, #e4eeea, #f4f8f6, #e4eeea);
-            background-size: 200% 100%;
-            animation: sh 1.3s infinite;
-        }
-
-        @keyframes sh {
-            to {
-                background-position: -200% 0;
-            }
-        }
-
-        /* ==============================
-           Dialog and Toast Notifications
-        ============================== */
-        dialog {
-            border: 0;
-            border-radius: 24px;
-            padding: 26px;
-            width: min(500px, 92vw);
-            max-height: 92vh;
-            margin: auto;
-            color: var(--ink);
-        }
-
-        dialog::backdrop {
-            background: rgba(11, 42, 42, .55);
-        }
-
-        dialog h2 {
-            font-size: 1.3rem;
-            margin-bottom: 14px;
-        }
-
-        .dialog-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 8px;
-        }
-
-        #toast {
-            position: fixed;
-            left: 50%;
-            bottom: 24px;
-            transform: translateX(-50%);
-            background: var(--ink);
-            color: var(--white);
-            padding: 12px 22px;
-            border-radius: 999px;
-            font-weight: 500;
-            z-index: 100;
-            max-width: 90vw;
-        }
-
-        /* ==============================
-           Responsive Design
-        ============================== */
-        @media (max-width: 1050px) {
-            .charts {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .charts .card:first-child {
-                grid-column: 1 / -1;
-            }
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 960px) {
-            .layout {
-                grid-template-columns: 1fr;
-            }
-
-            .sticky {
-                position: static;
-            }
-        }
-
-        @media (max-width: 620px) {
-            .charts {
-                grid-template-columns: 1fr;
-            }
-
-            .row {
-                grid-template-columns: 1fr;
-            }
-
-            .top nav a {
-                display: none;
-            }
-
-            .stats {
-                margin-top: -48px;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation: none !important;
-                transition: none !important;
-            }
-        }
-
-        /* ==============================
-           Shared Extras: Tabs, Tables
-           and Status Badges
-        ============================== */
-        .tabs {
-            display: inline-flex;
-            gap: 6px;
-            background: var(--white);
-            padding: 5px;
-            border-radius: 999px;
-            margin: 26px 0 18px;
-            box-shadow: 0 4px 14px rgba(11, 42, 42, .06);
-            flex-wrap: wrap;
-        }
-
-        .tabs button {
-            border: 0;
-            background: none;
-            font: inherit;
-            font-weight: 700;
-            color: var(--muted);
-            padding: 9px 22px;
-            border-radius: 999px;
-            cursor: pointer;
-        }
-
-        .tabs button[aria-selected="true"] {
-            background: var(--ink);
-            color: var(--white);
-        }
-
-        /* Table Layout */
-        .table-wrap {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: .95rem;
-        }
-
-        th {
-            text-align: left;
-            font-size: .82rem;
-            color: var(--muted);
-            padding: 10px 12px;
-            border-bottom: 2px solid var(--fog);
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid var(--fog);
-            vertical-align: middle;
-        }
-
-        /* Order Status Badges */
-        .st {
-            font-size: .8rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 999px;
-            white-space: nowrap;
-            display: inline-block;
-        }
-
-        .st-pending {
-            background: #fff0c9;
-            color: #7a5600;
-        }
-
-        .st-accepted {
-            background: #d9e8ff;
-            color: #1b4a8a;
-        }
-
-        .st-delivered {
-            background: #d6f5e6;
-            color: #116236;
-        }
-
-        .st-rejected,
-        .st-cancelled {
-            background: #ffe0dc;
-            color: #9a2a20;
-        }
-
-        .st-yes {
-            background: #d6f5e6;
-            color: #116236;
-        }
-
-        .st-no {
-            background: #eef4f2;
-            color: #4d6666;
-        }
-
-        /* Table Thumbnails and Helpers */
-        .thumb {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            object-fit: cover;
-            background: var(--mint);
-            display: inline-grid;
-            place-items: center;
-            vertical-align: middle;
-            margin-right: 10px;
-            overflow: hidden;
-        }
-
-        .total-line {
-            font-family: var(--head);
-            font-weight: 800;
-            font-size: 1.2rem;
-            margin: 6px 0 14px;
-        }
-
-        .toolbar {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-
-        .toolbar input,
-        .toolbar select {
-            width: auto;
-            flex: 1 1 180px;
-        }
-
-        .cell-sub {
-            color: var(--muted);
-            font-size: .85rem;
-        }
-
-        .tab-panel {
-            background: var(--white);
-            border-radius: 24px;
-            padding: 24px;
-        }
-
-        .stats.six {
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        @media (max-width: 620px) {
-            .stats.six {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farmer Dashboard - AgriLink LK</title>
+<link rel="stylesheet" href="css/fonts.css">
+<style>
+:root{
+  --ink:#0b2a2a; --ink-2:#12403f; --mint:#8fe3c0; --papaya:#ff8a3d; --sky:#c9dcf5;
+  --fog:#eef4f2; --white:#fff; --muted:#4d6666; --line:#c9dad5; --error:#b3261e; --ok:#1a7f4b;
+  
+  
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);color:var(--ink);background:var(--fog);line-height:1.6;font-size:16.5px;min-height:100vh}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--papaya);outline-offset:2px;border-radius:8px}
+h1,h2,h3{font-family:var(--head);line-height:1.15;font-weight:800}
+.wrap{width:min(1220px,94%);margin-inline:auto}
+[hidden]{display:none!important}
+
+/* Top bar */
+.top{background:var(--ink);color:var(--white);position:sticky;top:0;z-index:40}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+.logo{font-family:var(--head);font-weight:800;font-size:1.35rem;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo i{width:13px;height:13px;background:var(--papaya);border-radius:50%;box-shadow:0 0 0 5px rgba(255,138,61,.3);display:inline-block}
+.top nav{display:flex;align-items:center;gap:6px}
+.top nav a,.top nav button{color:var(--white);text-decoration:none;background:none;border:0;font:inherit;font-weight:500;padding:8px 14px;border-radius:999px;cursor:pointer}
+.top nav a:hover,.top nav button:hover{background:rgba(255,255,255,.14)}
+
+/* Banner */
+.banner{background:linear-gradient(120deg,var(--ink),var(--ink-2));color:var(--white);padding:36px 0 84px}
+.banner .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.banner h1{font-size:clamp(1.8rem,3.6vw,2.6rem)}
+.banner p{color:#bcdcd3;margin-top:4px}
+
+/* Stats overlap the banner */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:-56px}
+.stat{background:var(--white);border-radius:20px;padding:20px 22px;box-shadow:0 10px 30px rgba(11,42,42,.1);border-top:5px solid var(--mint)}
+.stat:nth-child(2){border-color:var(--papaya)}
+.stat:nth-child(3){border-color:var(--sky)}
+.stat:nth-child(4){border-color:var(--ink)}
+.stat b{display:block;font-family:var(--head);font-size:1.9rem;line-height:1.15}
+.stat span{color:var(--muted);font-size:.93rem}
+
+/* Cards */
+.card{background:var(--white);border-radius:24px;padding:24px}
+.card h2{font-size:1.25rem;margin-bottom:14px}
+.section{margin-top:22px}
+.charts{display:grid;grid-template-columns:1fr 1.3fr 1.3fr;gap:18px}
+.chart-box{position:relative;height:240px}
+.hint-empty{color:var(--muted);text-align:center;padding:30px 10px}
+.layout{display:grid;grid-template-columns:370px 1fr;gap:22px;align-items:start;padding-bottom:70px}
+.sticky{position:sticky;top:86px}
+
+/* Forms */
+label{display:block;font-weight:700;font-size:.92rem;margin-bottom:5px}
+.field{margin-bottom:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input,select,textarea{width:100%;font:inherit;padding:11px 14px;border-radius:12px;border:2px solid var(--line);background:var(--white);color:var(--ink)}
+textarea{resize:vertical;min-height:80px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ink)}
+input[type="file"]{display:none}
+.drop{display:grid;place-items:center;text-align:center;gap:4px;border:2px dashed var(--line);border-radius:16px;padding:16px;cursor:pointer;color:var(--muted);font-weight:500;background:var(--fog);overflow:hidden}
+.drop:hover,.drop:focus-within{border-color:var(--ink)}
+.drop img{width:100%;max-height:170px;object-fit:cover;border-radius:10px}
+.drop small{font-weight:400}
+.check{display:flex;align-items:center;gap:8px;font-weight:500;margin:8px 0 0}
+.check input{width:auto}
+.btn{font:inherit;font-weight:700;border:0;border-radius:999px;padding:12px 24px;cursor:pointer;background:var(--papaya);color:var(--ink);transition:filter .15s}
+.btn:hover{filter:brightness(1.07)}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn.full{width:100%}
+.btn.ghost{background:var(--fog)}
+.btn.small{padding:7px 14px;font-size:.88rem}
+.btn.danger{background:#fde4e1;color:var(--error)}
+.msg{min-height:1.3em;margin-bottom:8px;font-weight:500;font-size:.93rem;color:var(--error)}
+
+/* Product list */
+.tools{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.tools h2{margin:0}
+.tools input{max-width:220px}
+.filters{display:flex;gap:6px;margin-bottom:18px}
+.filters button{border:2px solid var(--ink);background:none;color:var(--ink);font:inherit;font-weight:700;font-size:.9rem;border-radius:999px;padding:5px 16px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--white)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.prod{border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;background:var(--white)}
+.pic{position:relative;height:150px;background:linear-gradient(135deg,var(--mint),var(--sky));display:grid;place-items:center;font-size:3rem}
+.pic img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.badge{position:absolute;top:10px;left:10px;font-size:.8rem;font-weight:700;padding:4px 12px;border-radius:999px}
+.badge.in{background:#d6f5e6;color:#116236}
+.badge.out{background:#ffe3d0;color:#8a3a0b}
+.pbody{padding:16px;display:flex;flex-direction:column;gap:2px;flex:1}
+.pbody h3{font-family:var(--body);font-size:1.1rem;font-weight:700}
+.meta{color:var(--muted);font-size:.9rem}
+.price{font-family:var(--head);font-weight:800;font-size:1.15rem;margin-top:4px}
+.price small{font-family:var(--body);font-weight:400;color:var(--muted)}
+.desc{font-size:.88rem;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:12px}
+.empty{text-align:center;color:var(--muted);padding:40px 10px;grid-column:1/-1}
+.skeleton{height:250px;border-radius:20px;background:linear-gradient(90deg,#e4eeea,#f4f8f6,#e4eeea);background-size:200% 100%;animation:sh 1.3s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+
+/* Dialog and toast */
+dialog{border:0;border-radius:24px;padding:26px;width:min(500px,92vw);max-height:92vh;margin:auto;color:var(--ink)}
+dialog::backdrop{background:rgba(11,42,42,.55)}
+dialog h2{font-size:1.3rem;margin-bottom:14px}
+.dialog-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--white);padding:12px 22px;border-radius:999px;font-weight:500;z-index:100;max-width:90vw}
+
+@media (max-width:1050px){.charts{grid-template-columns:1fr 1fr}.charts .card:first-child{grid-column:1/-1}.stats{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:960px){.layout{grid-template-columns:1fr}.sticky{position:static}}
+@media (max-width:620px){.charts{grid-template-columns:1fr}.row{grid-template-columns:1fr}.top nav a{display:none}.stats{margin-top:-48px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---- Shared extras: tabs, tables, status badges ---- */
+.tabs{display:inline-flex;gap:6px;background:var(--white);padding:5px;border-radius:999px;margin:26px 0 18px;box-shadow:0 4px 14px rgba(11,42,42,.06);flex-wrap:wrap}
+.tabs button{border:0;background:none;font:inherit;font-weight:700;color:var(--muted);padding:9px 22px;border-radius:999px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--white)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th{text-align:left;font-size:.82rem;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--fog);white-space:nowrap}
+td{padding:12px;border-bottom:1px solid var(--fog);vertical-align:middle}
+.st{font-size:.8rem;font-weight:700;padding:4px 12px;border-radius:999px;white-space:nowrap;display:inline-block}
+.st-pending{background:#fff0c9;color:#7a5600}.st-accepted{background:#d9e8ff;color:#1b4a8a}
+.st-delivered{background:#d6f5e6;color:#116236}.st-rejected,.st-cancelled{background:#ffe0dc;color:#9a2a20}
+.st-yes{background:#d6f5e6;color:#116236}.st-no{background:#eef4f2;color:#4d6666}
+.thumb{width:44px;height:44px;border-radius:10px;object-fit:cover;background:var(--mint);display:inline-grid;place-items:center;vertical-align:middle;margin-right:10px;overflow:hidden}
+.total-line{font-family:var(--head);font-weight:800;font-size:1.2rem;margin:6px 0 14px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.toolbar input,.toolbar select{width:auto;flex:1 1 180px}
+.cell-sub{color:var(--muted);font-size:.85rem}
+.tab-panel{background:var(--white);border-radius:24px;padding:24px}
+.stats.six{grid-template-columns:repeat(3,1fr)}
+@media (max-width:620px){.stats.six{grid-template-columns:1fr 1fr}}
+</style>
 </head>
-
 <body>
 
-    <!-- ==============================
-         Top Navigation
-    ============================== -->
-    <header class="top">
-        <div class="wrap">
-            <a class="logo" href="index.html">
-                <i></i>AgriLink LK
-            </a>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="index.html"><i></i>AgriLink LK</a>
+    <nav aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <button type="button" id="logoutBtn">Log out</button>
+    </nav>
+  </div>
+</header>
 
-            <nav aria-label="Main">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <button type="button" id="logoutBtn">Log out</button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- ==============================
-         Dashboard Welcome Banner
-    ============================== -->
-    <div class="banner">
-        <div class="wrap">
-            <div>
-                <h1 id="greeting">Farmer dashboard</h1>
-                <p>Add your produce, set your prices and keep your stock up to date.</p>
-            </div>
-
-            <a class="btn" href="#addCard" style="text-decoration: none">
-                Add a product
-            </a>
-        </div>
+<div class="banner">
+  <div class="wrap">
+    <div>
+      <h1 id="greeting">Farmer dashboard</h1>
+      <p>Add your produce, set your prices and keep your stock up to date.</p>
     </div>
+    <a class="btn" href="#addCard" style="text-decoration:none">Add a product</a>
+  </div>
+</div>
 
-    <!-- ==============================
-         Main Dashboard Content
-    ============================== -->
-    <main class="wrap">
+<main class="wrap">
+  <div class="stats" aria-label="Summary">
+    <div class="stat"><b id="statTotal">0</b><span>Products listed</span></div>
+    <div class="stat"><b id="statIn">0</b><span>Available now</span></div>
+    <div class="stat"><b id="statOut">0</b><span>Out of stock</span></div>
+    <div class="stat"><b id="statValue">Rs. 0</b><span>Stock value at your prices</span></div>
+  </div>
 
-        <!-- Dashboard Statistics -->
-        <div class="stats" aria-label="Summary">
-            <div class="stat">
-                <b id="statTotal">0</b>
-                <span>Products listed</span>
-            </div>
+  <section class="section" id="chartsSection" aria-label="Charts">
+    <p class="card hint-empty" id="chartsEmpty">Charts appear here once you add your first product.</p>
+    <div class="charts" id="chartsGrid" hidden>
+      <div class="card"><h2>Products by category</h2><div class="chart-box"><canvas id="chartCategory" aria-label="Products by category" role="img"></canvas></div></div>
+      <div class="card"><h2>Stock by product</h2><div class="chart-box"><canvas id="chartStock" aria-label="Stock quantity by product" role="img"></canvas></div></div>
+      <div class="card"><h2>Stock value by category (Rs.)</h2><div class="chart-box"><canvas id="chartValue" aria-label="Stock value by category" role="img"></canvas></div></div>
+    </div>
+  </section>
 
-            <div class="stat">
-                <b id="statIn">0</b>
-                <span>Available now</span>
-            </div>
+  <section class="section card" id="ordersCard" aria-labelledby="ordersTitle">
+    <h2 id="ordersTitle">Incoming orders <span class="st st-pending" id="pendingCount" hidden></span></h2>
+    <div class="table-wrap" id="orderTable"><p class="empty">Loading orders...</p></div>
+  </section>
 
-            <div class="stat">
-                <b id="statOut">0</b>
-                <span>Out of stock</span>
-            </div>
-
-            <div class="stat">
-                <b id="statValue">Rs. 0</b>
-                <span>Stock value at your prices</span>
-            </div>
+  <div class="layout section">
+    <section class="card sticky" id="addCard" aria-labelledby="addTitle">
+      <h2 id="addTitle">Add a product</h2>
+      <form id="addForm">
+        <p class="msg" id="addMsg" role="alert"></p>
+        <div class="field">
+          <label for="image">Photo</label>
+          <label class="drop" for="image" id="dropZone">
+            <img id="preview" alt="Selected photo preview" hidden>
+            <span id="dropText">Click to choose a photo<br><small>JPG, PNG or WEBP, up to 3 MB</small></span>
+          </label>
+          <input id="image" type="file" accept="image/jpeg,image/png,image/webp">
         </div>
-
-        <!-- Dashboard Charts -->
-        <section class="section" id="chartsSection" aria-label="Charts">
-            <p class="card hint-empty" id="chartsEmpty">
-                Charts appear here once you add your first product.
-            </p>
-
-            <div class="charts" id="chartsGrid" hidden>
-                <div class="card">
-                    <h2>Products by category</h2>
-
-                    <div class="chart-box">
-                        <canvas
-                            id="chartCategory"
-                            aria-label="Products by category"
-                            role="img"
-                        ></canvas>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h2>Stock by product</h2>
-
-                    <div class="chart-box">
-                        <canvas
-                            id="chartStock"
-                            aria-label="Stock quantity by product"
-                            role="img"
-                        ></canvas>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h2>Stock value by category (Rs.)</h2>
-
-                    <div class="chart-box">
-                        <canvas
-                            id="chartValue"
-                            aria-label="Stock value by category"
-                            role="img"
-                        ></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Incoming Orders -->
-        <section class="section card" id="ordersCard" aria-labelledby="ordersTitle">
-            <h2 id="ordersTitle">
-                Incoming orders
-                <span class="st st-pending" id="pendingCount" hidden></span>
-            </h2>
-
-            <div class="table-wrap" id="orderTable">
-                <p class="empty">Loading orders...</p>
-            </div>
-        </section>
-
-        <!-- ==============================
-             Product Management Layout
-        ============================== -->
-        <div class="layout section">
-
-            <!-- Add Product Form -->
-            <section class="card sticky" id="addCard" aria-labelledby="addTitle">
-                <h2 id="addTitle">Add a product</h2>
-
-                <form id="addForm">
-                    <p class="msg" id="addMsg" role="alert"></p>
-
-                    <!-- Product Photo Upload -->
-                    <div class="field">
-                        <label for="image">Photo</label>
-
-                        <label class="drop" for="image" id="dropZone">
-                            <img
-                                id="preview"
-                                alt="Selected photo preview"
-                                hidden
-                            >
-
-                            <span id="dropText">
-                                Click to choose a photo
-                                <br>
-                                <small>JPG, PNG or WEBP, up to 3 MB</small>
-                            </span>
-                        </label>
-
-                        <input
-                            id="image"
-                            type="file"
-                            accept="image/jpeg,image/png,image/webp"
-                        >
-                    </div>
-
-                    <!-- Product Name -->
-                    <div class="field">
-                        <label for="pname">Product name</label>
-
-                        <input
-                            id="pname"
-                            placeholder="e.g. Carrots"
-                            required
-                        >
-                    </div>
-
-                    <!-- Product Category -->
-                    <div class="field">
-                        <label for="category">Category</label>
-
-                        <input
-                            id="category"
-                            list="categories"
-                            placeholder="Choose or type"
-                            required
-                        >
-
-                        <datalist id="categories">
-                            <option value="Vegetables">
-                            <option value="Fruits">
-                            <option value="Grains and rice">
-                            <option value="Spices">
-                            <option value="Tea and coffee">
-                            <option value="Dairy and eggs">
-                        </datalist>
-                    </div>
-
-                    <!-- Product Price and Unit -->
-                    <div class="row">
-                        <div class="field">
-                            <label for="price">Price (Rs.)</label>
-
-                            <input
-                                id="price"
-                                type="number"
-                                min="0.01"
-                                step="0.01"
-                                placeholder="0.00"
-                                required
-                            >
-                        </div>
-
-                        <div class="field">
-                            <label for="unit">Per</label>
-
-                            <select id="unit">
-                                <option>kg</option>
-                                <option>g</option>
-                                <option>bunch</option>
-                                <option>piece</option>
-                                <option>litre</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Available Quantity -->
-                    <div class="field">
-                        <label for="qty">Quantity available</label>
-
-                        <input
-                            id="qty"
-                            type="number"
-                            min="0"
-                            step="1"
-                            placeholder="0"
-                            required
-                        >
-                    </div>
-
-                    <!-- Product Description -->
-                    <div class="field">
-                        <label for="desc">Description</label>
-
-                        <textarea
-                            id="desc"
-                            maxlength="500"
-                            placeholder="Variety, freshness, harvest date..."
-                        ></textarea>
-                    </div>
-
-                    <button class="btn full" type="submit">
-                        Add product
-                    </button>
-                </form>
-            </section>
-
-            <!-- My Products Section -->
-            <section class="card" aria-labelledby="listTitle">
-
-                <!-- Product Search -->
-                <div class="tools">
-                    <h2 id="listTitle">My products</h2>
-
-                    <input
-                        type="search"
-                        id="search"
-                        placeholder="Search by name or category"
-                        aria-label="Search my products"
-                    >
-                </div>
-
-                <!-- Stock Filters -->
-                <div
-                    class="filters"
-                    id="filters"
-                    role="group"
-                    aria-label="Filter by stock"
-                >
-                    <button
-                        type="button"
-                        data-filter="all"
-                        aria-pressed="true"
-                    >
-                        All
-                    </button>
-
-                    <button
-                        type="button"
-                        data-filter="in"
-                        aria-pressed="false"
-                    >
-                        Available
-                    </button>
-
-                    <button
-                        type="button"
-                        data-filter="out"
-                        aria-pressed="false"
-                    >
-                        Out of stock
-                    </button>
-                </div>
-
-                <!-- Product List -->
-                <div class="grid" id="productList" aria-live="polite">
-                    <div class="skeleton"></div>
-                    <div class="skeleton"></div>
-                    <div class="skeleton"></div>
-                </div>
-            </section>
+        <div class="field">
+          <label for="pname">Product name</label>
+          <input id="pname" placeholder="e.g. Carrots" required>
         </div>
-    </main>
+        <div class="field">
+          <label for="category">Category</label>
+          <input id="category" list="categories" placeholder="Choose or type" required>
+          <datalist id="categories">
+            <option value="Vegetables"><option value="Fruits"><option value="Grains and rice">
+            <option value="Spices"><option value="Tea and coffee"><option value="Dairy and eggs">
+          </datalist>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="price">Price (Rs.)</label>
+            <input id="price" type="number" min="0.01" step="0.01" placeholder="0.00" required>
+          </div>
+          <div class="field">
+            <label for="unit">Per</label>
+            <select id="unit"><option>kg</option><option>g</option><option>bunch</option><option>piece</option><option>litre</option></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="qty">Quantity available</label>
+          <input id="qty" type="number" min="0" step="1" placeholder="0" required>
+        </div>
+        <div class="field">
+          <label for="desc">Description</label>
+          <textarea id="desc" maxlength="500" placeholder="Variety, freshness, harvest date..."></textarea>
+        </div>
+        <button class="btn full" type="submit">Add product</button>
+      </form>
+    </section>
 
-    <!-- ==============================
-         Edit Product Dialog
-    ============================== -->
-    <dialog id="editDialog" aria-labelledby="editTitle">
-        <h2 id="editTitle">Edit product</h2>
+    <section class="card" aria-labelledby="listTitle">
+      <div class="tools">
+        <h2 id="listTitle">My products</h2>
+        <input type="search" id="search" placeholder="Search by name or category" aria-label="Search my products">
+      </div>
+      <div class="filters" id="filters" role="group" aria-label="Filter by stock">
+        <button type="button" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-filter="in" aria-pressed="false">Available</button>
+        <button type="button" data-filter="out" aria-pressed="false">Out of stock</button>
+      </div>
+      <div class="grid" id="productList" aria-live="polite">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+    </section>
+  </div>
+</main>
 
-        <form id="editForm">
-            <p class="msg" id="editMsg" role="alert"></p>
+<dialog id="editDialog" aria-labelledby="editTitle">
+  <h2 id="editTitle">Edit product</h2>
+  <form id="editForm">
+    <p class="msg" id="editMsg" role="alert"></p>
+    <div class="field">
+      <label for="e_image">Photo</label>
+      <label class="drop" for="e_image">
+        <img id="e_preview" alt="Product photo preview" hidden>
+        <span id="e_dropText">Click to choose a new photo<br><small>JPG, PNG or WEBP, up to 3 MB</small></span>
+      </label>
+      <input id="e_image" type="file" accept="image/jpeg,image/png,image/webp">
+      <label class="check" id="removeRow"><input type="checkbox" id="e_remove"> Remove the current photo</label>
+    </div>
+    <div class="field"><label for="e_name">Product name</label><input id="e_name" required></div>
+    <div class="field"><label for="e_category">Category</label><input id="e_category" list="categories" required></div>
+    <div class="row">
+      <div class="field"><label for="e_price">Price (Rs.)</label><input id="e_price" type="number" min="0.01" step="0.01" required></div>
+      <div class="field"><label for="e_unit">Per</label>
+        <select id="e_unit"><option>kg</option><option>g</option><option>bunch</option><option>piece</option><option>litre</option></select>
+      </div>
+    </div>
+    <div class="field"><label for="e_qty">Quantity available</label><input id="e_qty" type="number" min="0" step="1" required></div>
+    <div class="field"><label for="e_desc">Description</label><textarea id="e_desc" maxlength="500"></textarea></div>
+    <div class="dialog-actions">
+      <button type="button" class="btn ghost" id="editCancel">Cancel</button>
+      <button type="submit" class="btn">Save changes</button>
+    </div>
+  </form>
+</dialog>
 
-            <!-- Update Product Photo -->
-            <div class="field">
-                <label for="e_image">Photo</label>
+<div id="toast" role="status" hidden></div>
 
-                <label class="drop" for="e_image">
-                    <img
-                        id="e_preview"
-                        alt="Product photo preview"
-                        hidden
-                    >
-
-                    <span id="e_dropText">
-                        Click to choose a new photo
-                        <br>
-                        <small>JPG, PNG or WEBP, up to 3 MB</small>
-                    </span>
-                </label>
-
-                <input
-                    id="e_image"
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                >
-
-                <label class="check" id="removeRow">
-                    <input type="checkbox" id="e_remove">
-                    Remove the current photo
-                </label>
-            </div>
-
-            <!-- Update Product Name -->
-            <div class="field">
-                <label for="e_name">Product name</label>
-                <input id="e_name" required>
-            </div>
-
-            <!-- Update Product Category -->
-            <div class="field">
-                <label for="e_category">Category</label>
-                <input id="e_category" list="categories" required>
-            </div>
-
-            <!-- Update Price and Unit -->
-            <div class="row">
-                <div class="field">
-                    <label for="e_price">Price (Rs.)</label>
-
-                    <input
-                        id="e_price"
-                        type="number"
-                        min="0.01"
-                        step="0.01"
-                        required
-                    >
-                </div>
-
-                <div class="field">
-                    <label for="e_unit">Per</label>
-
-                    <select id="e_unit">
-                        <option>kg</option>
-                        <option>g</option>
-                        <option>bunch</option>
-                        <option>piece</option>
-                        <option>litre</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Update Available Quantity -->
-            <div class="field">
-                <label for="e_qty">Quantity available</label>
-
-                <input
-                    id="e_qty"
-                    type="number"
-                    min="0"
-                    step="1"
-                    required
-                >
-            </div>
-
-            <!-- Update Description -->
-            <div class="field">
-                <label for="e_desc">Description</label>
-
-                <textarea
-                    id="e_desc"
-                    maxlength="500"
-                ></textarea>
-            </div>
-
-            <!-- Dialog Actions -->
-            <div class="dialog-actions">
-                <button
-                    type="button"
-                    class="btn ghost"
-                    id="editCancel"
-                >
-                    Cancel
-                </button>
-
-                <button type="submit" class="btn">
-                    Save changes
-                </button>
-            </div>
-        </form>
-    </dialog>
-
-    <!-- Toast Notification -->
-    <div id="toast" role="status" hidden></div>
-
-    <!-- ==============================
-         JavaScript Libraries and Files
-    ============================== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-
-    <script src="js/api.js"></script>
-    <script src="js/farmer.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/farmer.js"></script>
 </body>
 </html>

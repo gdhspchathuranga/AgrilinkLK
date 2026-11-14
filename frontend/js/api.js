@@ -75,5 +75,22 @@
     // Make Chart.js use the same font as the page
     if (window.Chart) Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
 
-    window.Api = { API_BASE, request, requireRole, logout, clearSession, esc, assetUrl };
+    const DASHBOARDS = {
+        farmer: "farmer-dashboard.html",
+        buyer: "buyer-dashboard.html",
+        admin: "admin-dashboard.html"
+    };
+
+    // The logged-in visitor ({ token, role, name }) or null
+    function session() {
+        const token = localStorage.getItem("token");
+        const role = (localStorage.getItem("role") || "").toLowerCase();
+        return token && DASHBOARDS[role] ? { token, role, name: localStorage.getItem("name") || "" } : null;
+    }
+
+    function dashboardFor(role) {
+        return DASHBOARDS[String(role).toLowerCase()] || LOGIN_PAGE;
+    }
+
+    window.Api = { API_BASE, request, requireRole, logout, clearSession, esc, assetUrl, session, dashboardFor };
 })();
