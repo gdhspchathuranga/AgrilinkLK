@@ -82,7 +82,7 @@ AgriLink LK aims to promote fair pricing, improve market accessibility, and supp
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/AgriLink-LK.git
+git clone https://github.com/gdhspchathuranga/AgrilinkLK.git
 cd AgriLink-LK
 ```
 
